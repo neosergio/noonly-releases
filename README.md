@@ -24,6 +24,13 @@ spctl --assess --type execute --verbose=2 /Applications/Noonly.app
 
 A correct result reads `accepted` and `source=Notarized Developer ID`.
 
+## The file format
+
+Noonly writes into files you own, so what it writes is documented:
+[WORKLOG_FORMAT.md](WORKLOG_FORMAT.md). A worklog is a folder of Markdown files, one per
+project, each with a title and a `## Log` section holding dated entries. Nothing else is
+required, and the files stay readable and editable without Noonly.
+
 ## Feedback
 
 Bug reports and impressions are welcome in
