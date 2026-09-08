@@ -5,6 +5,13 @@ work memory in plain Markdown worklogs.
 
 This repository holds releases only; it contains no source code.
 
+![Noonly showing two days of a worklog: projects grouped in the sidebar, entries under each
+day, and the composer at the bottom](screenshot.png)
+
+Two days of work across several projects. The marks under an entry are threads: an orange ring
+is work that was opened and is still open, a green check is work that was closed. That is the
+difference between a worklog and a diary — the log knows what is still waiting for you.
+
 ## Download
 
 **[Latest release](https://github.com/neosergio/noonly-releases/releases/latest)**
