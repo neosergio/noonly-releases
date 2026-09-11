@@ -25,7 +25,7 @@ to the disk image, so the first launch works with no network connection.
 ## Verifying a download
 
 ```sh
-shasum -a 256 Noonly-0.2.dmg     # compare against the checksum in the release notes
+shasum -a 256 Noonly-0.3.dmg     # compare against the checksum in the release notes
 spctl --assess --type execute --verbose=2 /Applications/Noonly.app
 ```
 
