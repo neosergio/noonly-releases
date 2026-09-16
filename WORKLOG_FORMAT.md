@@ -1,6 +1,7 @@
 # Noonly Worklog Format
 
-Status: Draft. v0.1 below, extended by the v0.2 thread markers, which Noonly implements.
+Status: Draft. v0.1 below, extended by the v0.2 thread markers and the v0.3 project markers,
+which Noonly implements.
 
 This document defines the initial worklog format understood by Noonly.
 
@@ -915,6 +916,81 @@ syntax that closes the gap.
 
 ---
 
+# v0.3 — finishing a project
+
+Status: **implemented**. It resolves open question 8, how archived projects are represented.
+
+## The problem this solves
+
+Projects end. A client relationship is over, a repository is handed back, a scope moves to
+someone else. Nothing in v0.2 could say so, and a finished project kept the same weight as a
+live one everywhere: in the list of projects, in the project picker, and in the view of which
+projects have gone quiet — where the finished one looks like the most neglected thing in the
+worklog, which is exactly backwards.
+
+The real worklog had already reached for a workaround. After the migration, 27 of its project
+files grew a `Estado: 🟢 activo / 🟡 pausado / ✅ terminado` line in their Context. The emoji
+status abandoned in the legacy format came back on its own, which is the evidence of need
+this document asks for before adding syntax.
+
+## Why not the Context line
+
+A status in Context is a summary synchronised by hand: the thing *Design principle* rejects.
+It carries no date, so when the project ended is lost the moment the line is edited. Its key
+and values are whatever the author's language and emoji habit happen to be, so reading it
+would mean guessing. And changing it means editing an existing line, which the product
+promises never to do.
+
+## The markers
+
+Finishing is an event, exactly like closing a thread:
+
+```markdown
+### 2026-09-14
+
+- Se acabó el trabajo con el cliente; se da por cerrado el repo. (closes project)
+```
+
+- `(closes project)` — this event finished the project.
+- `(reopens project)` — this event made it active again.
+
+`project` is a reserved word, not an anchor: there is no caret. `(closes ^project)` is still
+an ordinary thread named `project`, and never finishes anything. The difference is visible
+in a plain text editor, which is the test every marker has to pass.
+
+## Rules
+
+- A project is **finished** when its most recent project marker is `closes`, and it counts as
+  finished from the day of that event.
+- Events are read oldest day first. Within one day, an entry nearer the top of the day is the
+  newer one, because that is where new entries are written.
+- An ordinary event recorded after a project finished does **not** reopen it. The final
+  invoice, a handover note, a question answered months later — all of these happen to finished
+  projects. Only `(reopens project)` reopens one.
+- Finishing a project does **not** close or drop its open threads. Doing so would record facts
+  nobody wrote. Open threads in a finished project stay open and are reported, so the author
+  can close or drop each one.
+- The marker may appear anywhere in an event's text; the end of the first line reads best. It
+  may share an event with thread markers.
+
+## Diagnostics, never data loss
+
+Reported and preserved, and none makes a file unwritable:
+
+- a finished project with open threads;
+- `(closes project)` on a project that is already finished — the first one stands;
+- `(reopens project)` on a project that is not finished.
+
+## Compatibility
+
+A v0.2 file is a valid v0.3 file in which no project is finished. A v0.3 file opened by a v0.2
+reader shows the marker as literal text inside the event: readable and harmless.
+
+Finishing is the only state this adds. The worklog also says `🟡 pausado`, and pausing is left
+out until working without it proves the need.
+
+---
+
 # Open questions
 
 The following decisions intentionally remain open:
@@ -926,7 +1002,7 @@ The following decisions intentionally remain open:
 5. Whether project metadata should remain Markdown or use front matter.
 6. Whether large logs should be split by month or year.
 7. Whether a workspace needs a `.noonly` configuration file.
-8. How archived projects should be represented.
+8. ~~How archived projects should be represented.~~ Resolved by v0.3: finishing is an event.
 9. How project relationships should be represented.
 10. How Noonly should represent events created by collaborators.
 11. Whether explicit event types should ever become part of canonical Markdown.
